@@ -1,0 +1,127 @@
+.header {
+    background: linear-gradient(to bottom, #66bfff, #cce6ff); /* Mantén el color de fondo del encabezado */
+    color: white;
+    padding: 20px;
+  }
+  
+  .header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .menu-button {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: white; /* El color de la hamburguesa sigue siendo blanco */
+  }
+  
+  .logo {
+    height: 50px;
+  }
+  
+  .user-avatar {
+    border-radius: 50%;
+    height: 40px;
+    width: 40px;
+  }
+  
+  .primary-button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #0056b3;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .primary-button:hover {
+    background-color: #003d80;
+  }
+  
+  /* Estilos para el menú desplegable */
+  .menu {
+    display: none; /* Ocultar el menú por defecto */
+    position: absolute;
+    top: 60px; /* Coloca el menú justo debajo del header */
+    left: 0;
+    width: 200px; /* Ancho fijo para el menú */
+    background-color: #66bfff; /* Mantén el mismo color de fondo que el header */
+    padding: 10px 0;
+    border-radius: 5px; /* Bordes redondeados para el estilo rectangular */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Agrega sombra para hacerlo más visible */
+  }
+  
+  .menu.open {
+    display: block; /* Mostrar el menú cuando tiene la clase 'open' */
+  }
+  
+  /* Estilos para los enlaces del menú */
+  .menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .menu ul li {
+    margin: 10px 0;
+  }
+  
+  .menu ul li a {
+    display: block; /* Para asegurarse de que los enlaces ocupen toda la fila */
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    text-align: center; /* Centrar el texto dentro del enlace */
+    padding: 10px 0; /* Espaciado para los enlaces */
+  }
+  
+  .menu ul li a:hover {
+    background-color: #003d80; /* Resalta el enlace cuando el cursor pasa por encima */
+    text-decoration: none;
+  }
+  .home-icon {
+    font-size: 30px; /* Puedes ajustar este valor para hacerlo más grande o pequeño */
+  }
+  
+  .header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .user-info {
+    display: flex;
+    align-items: center;
+  }
+  
+  .home-link {
+    margin-right: 20px; /* Ajusta el espacio entre el icono de la casa y el botón */
+  }
+  
+  .register-button {
+    margin-left: 20px; /* Ajusta el espacio entre el icono de la casa y el botón */
+  }
+  
+  .register-button .btn {
+    font-size: 14px;
+  }
+  
+  /* Estilo para el botón de "Mi perfil" con ícono */
+.btn-secondary {
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  background-color: #0056b3;
+}
+
+.btn-secondary i {
+  margin-right: 8px; /* Espacio entre el ícono y el texto */
+}
