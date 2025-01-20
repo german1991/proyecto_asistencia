@@ -6,10 +6,10 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false); // Nuevo estado de carga
   const navigate = useNavigate();
 
   useEffect(() => {
-    
     const script = document.createElement("script");
     script.src = "https://accounts.google.com/gsi/client";
     script.async = true;
@@ -38,20 +38,21 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); // Inicia la carga
 
-    
     if (!email || !password) {
       setError("Por favor, rellene todos los campos.");
+      setLoading(false); // Finaliza la carga
       return;
     }
 
     if (!validateEmail(email)) {
       setError("Por favor, ingrese un correo electrónico válido.");
+      setLoading(false); // Finaliza la carga
       return;
     }
 
     try {
-      
       const response = await fetch("http://localhost:5000/api/login", {
         method: "POST",
         headers: {
@@ -60,25 +61,54 @@ function Login() {
         body: JSON.stringify({ email, password }),
       });
 
-      const data = await response.json();
-
       if (!response.ok) {
-        setError(data.message || "Error al iniciar sesión.");
+        const errorData = await response.json();
+        setError(errorData.message || "Error al iniciar sesión.");
+        setLoading(false); // Finaliza la carga
         return;
       }
 
-      console.log("Inicio de sesión exitoso:", data);
+      const data = await response.json();
+      console.log("Respuesta completa de la API:", data);
 
-      
+      // Guardar el token en localStorage
+      if (data.token) {
+        localStorage.setItem("jwt", data.token);
+        console.log("Token guardado:", data.token);
+      } else {
+        console.error("No se recibió un token en la respuesta.");
+        setError("Error al procesar la autenticación.");
+        setLoading(false); // Finaliza la carga
+        return;
+      }
+
+      // Redirigir según el rol
+      if (data.rol) {
+        if (data.rol === "prestador") {
+            setTimeout(() => {
+                navigate("/prestador-dashboard");
+                window.location.reload(); // Refresca automáticamente después de redirigir
+            }, 10);
+        } else {
+            setTimeout(() => {
+                navigate("/usuario-dashboard");
+                window.location.reload(); // Refresca automáticamente después de redirigir
+            }, 10);
+        }
+    } else {
+        console.error("No se recibió un campo 'rol'.");
+        setLoading(false); // Finaliza la carga
+    }
+    
+
       setEmail("");
       setPassword("");
       setError("");
 
-      
-      navigate("/dashboard");
     } catch (err) {
       console.error("Error durante el inicio de sesión:", err);
       setError("No se pudo conectar al servidor. Intente más tarde.");
+      setLoading(false); // Finaliza la carga
     }
   };
 
@@ -90,8 +120,18 @@ function Login() {
       const userInfo = parseJwt(token);
       console.log("Información del usuario:", userInfo);
 
-      
-      navigate("/dashboard");
+      // Guardar el token en localStorage
+      localStorage.setItem("jwt", token);
+
+      // Redirigir según el rol del usuario
+      if (userInfo.rol === "prestador") {
+        navigate("/prestador-dashboard");
+      } else {
+        setTimeout(() => {
+          navigate("/usuario-dashboard");
+          window.location.reload(); // Refresca automáticamente después de redirigir
+      }, 10);
+    }
     } catch (error) {
       console.error("Error en el inicio de sesión con Google:", error);
       setError("No se pudo iniciar sesión con Google. Intente de nuevo.");
@@ -141,8 +181,8 @@ function Login() {
           />
         </div>
 
-        <button type="submit" className="btn btn-primary">
-          Iniciar Sesión
+        <button type="submit" className="btn btn-primary" disabled={loading}>
+          {loading ? "Cargando..." : "Iniciar Sesión"}
         </button>
       </form>
 

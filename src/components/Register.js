@@ -4,14 +4,16 @@ import "./Register.css";
 
 function Register() {
   const [formData, setFormData] = useState({
+    nombre: "",
+    apellido: "",
+    documento: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
   const [error, setError] = useState("");
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
-  
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -20,58 +22,100 @@ function Register() {
     });
   };
 
-  
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
-    const { email, password, confirmPassword } = formData;
-  
+
+    const { nombre, apellido, documento, email, password, confirmPassword } = formData;
+
     if (password !== confirmPassword) {
-      setError("Las contraseñas no coinciden");
-      return;
+        setError("Las contraseñas no coinciden");
+        return;
     }
-  
+
     try {
-      const response = await fetch("http://localhost:5000/api/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
-  
-      
-      if (!response.ok) {
-       
-        const data = await response.json();  
-        throw new Error(data.message || "Error desconocido");  
-      }
-  
-      
-      alert("Registro exitoso");
-      navigate("/login");
+        let roleSelection = null;
+        let registrationComplete = false;
+
+        while (!registrationComplete) {
+            const response = await fetch("http://localhost:5000/api/register", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ nombre, apellido, documento, email, password, selectedRole: roleSelection }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok && data.needsRoleSelection) {
+                // Mostrar cuadro de selección de roles
+                const selectedRole = window.prompt(
+                    `${data.message}\nEscribe "prestador" o "usuario" para continuar.`,
+                    "prestador"
+                );
+
+                if (!selectedRole || !data.rolesAvailable.includes(selectedRole.toLowerCase())) {
+                    alert("Debes seleccionar un rol válido.");
+                } else {
+                    roleSelection = selectedRole.toLowerCase();
+                }
+            } else if (!response.ok) {
+                throw new Error(data.message || "Error desconocido");
+            } else {
+                registrationComplete = true;
+                alert("Registro exitoso");
+                navigate("/login");
+            }
+        }
     } catch (error) {
-      console.error("Error en el registro:", error);
-  
-      
-      const errorMessage = error?.message || "Error desconocido";  
-     
-      if (error instanceof SyntaxError || !errorMessage) {
-        setError("El usuario ya se encuentra registrado.");
-      } else {
-        setError(`Error en el registro: ${errorMessage}`);
-      }
+        console.error("Error en el registro:", error.message);
+        setError(`Error en el registro: ${error.message}`);
     }
-  };
-  
-  
+};
 
 
+  
   return (
     <div className="register-container">
       <h2>Formulario de Registro</h2>
       {error && <div className="error-message">{error}</div>}
       <form onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label htmlFor="nombre">Nombre</label>
+          <input
+            type="text"
+            id="nombre"
+            name="nombre"
+            value={formData.nombre}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="apellido">Apellido</label>
+          <input
+            type="text"
+            id="apellido"
+            name="apellido"
+            value={formData.apellido}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="documento">Número de Documento</label>
+          <input
+            type="text"
+            id="documento"
+            name="documento"
+            value={formData.documento}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
         <div className="form-group">
           <label htmlFor="email">Correo electrónico</label>
           <input

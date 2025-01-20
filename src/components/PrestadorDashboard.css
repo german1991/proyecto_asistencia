@@ -1,0 +1,82 @@
+.dashboard-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+  background-color: #2e2e2e; /* Fondo gris oscuro */
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Sombra más marcada */
+}
+
+.dashboard-container h1 {
+  font-size: 2.5rem;
+  color: #eaeaea; /* Texto claro */
+  margin-bottom: 20px;
+}
+
+.dashboard-container p {
+  font-size: 1.1rem;
+  color: #b3b3b3; /* Texto gris claro */
+  margin-bottom: 30px;
+}
+
+.dashboard-button {
+  margin-top: 20px;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  color: #ffffff;
+  background-color: #3a3a3a; /* Botones gris oscuro */
+  border: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.dashboard-button:hover {
+  background-color: #525252; /* Un tono más claro al pasar el cursor */
+  transform: translateY(-3px);
+}
+
+.dashboard-button:active {
+  transform: translateY(0);
+}
+
+.dashboard-sections {
+  margin-top: 40px;
+  text-align: left;
+}
+
+.dashboard-section {
+  margin-bottom: 30px;
+  padding: 20px;
+  background-color: #393939; /* Fondo gris oscuro para las secciones */
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Sombra más marcada */
+}
+
+.dashboard-section h3 {
+  font-size: 1.5rem;
+  color: #eaeaea; /* Texto claro */
+  margin-bottom: 10px;
+}
+
+.dashboard-section p {
+  font-size: 1rem;
+  color: #b3b3b3; /* Texto gris claro */
+  margin-bottom: 15px;
+}
+
+.dashboard-section .dashboard-button {
+  background-color: #3a3a3a; /* Botones gris oscuro */
+  color: #ffffff; /* Texto blanco */
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.dashboard-section .dashboard-button:hover {
+  background-color: #525252; /* Más claro al hover */
+}

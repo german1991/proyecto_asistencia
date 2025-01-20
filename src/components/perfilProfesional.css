@@ -1,0 +1,24 @@
+.perfil-profesional {
+    font-family: 'Arial, sans-serif';
+    margin: 20px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+  }
+  
+  .perfil-title {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .perfil-details p {
+    margin: 10px 0;
+    font-size: 16px;
+  }
+  
+  .perfil-details strong {
+    color: #555;
+  }
+  

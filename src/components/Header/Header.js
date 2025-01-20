@@ -1,62 +1,83 @@
-import React, { useState } from "react";
-import 'bootstrap-icons/font/bootstrap-icons.css';
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import "./Header.css";
 
 function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false); // Estado para controlar si el menú está abierto
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Estado para verificar si el usuario está logueado
+  const navigate = useNavigate(); // Hook para redirección
 
   // Función que alterna el estado del menú
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  // Simulamos el login (esto debe ser reemplazado con la lógica real de autenticación)
-  const handleLogin = () => {
-    setIsLoggedIn(true); // Aquí simula que el usuario hace login
+  // Actualiza el estado `isLoggedIn` al cargar el componente
+  useEffect(() => {
+    const jwt = localStorage.getItem("jwt");
+    setIsLoggedIn(!!jwt);
+  }, []);
+
+  // Listener para cambios en `localStorage`
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const jwt = localStorage.getItem("jwt");
+      setIsLoggedIn(!!jwt);
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      await fetch("http://localhost:5000/api/logout", {
+        method: "POST",
+      });
+      localStorage.removeItem("jwt"); // Eliminar JWT del localStorage
+      setIsLoggedIn(false); // Actualizar estado de logueo
+      navigate("/");
+      
+    } catch (error) {
+      console.error("Error al cerrar sesión:", error);
+    }
   };
 
-  const handleLogout = () => {
-    setIsLoggedIn(false); // Simula que el usuario hace logout
+  const handleVerEspecialistas = () => {
+    navigate("/buscador"); // Redirige al formulario de búsqueda
   };
 
   return (
     <header className="header">
       <div className="header-top">
-        {/* Botón del menú hamburguesa */}
         <button className="menu-button" onClick={toggleMenu}>
           ☰
         </button>
 
-        {/* Información del usuario */}
         <div className="user-info">
-          {/* Enlace al Home con icono de casa */}
           <Link to="/" className="home-link">
-            <i className="bi bi-house-door home-icon"></i> {/* Icono de la casa */}
+            <i className="bi bi-house-door home-icon"></i>
           </Link>
 
-          {/* Si el usuario no está logueado, mostramos el botón de registro */}
           {!isLoggedIn ? (
             <Link to="/register" className="register-button">
               <button className="btn btn-primary">Registrarse</button>
             </Link>
           ) : (
-            // Si el usuario está logueado, mostramos el ícono de persona
             <button className="btn btn-secondary" onClick={handleLogout}>
-              <i className="bi bi-person"></i> {/* Icono de persona */}
+              <i className="bi bi-person"></i>
             </button>
           )}
         </div>
       </div>
 
-      {/* Icono de salud centrado */}
       <div className="health-icon-container">
-        <i className="bi bi-clipboard-heart"></i> {/* Icono de salud */}
+        <i className="bi bi-clipboard-heart"></i>
       </div>
 
-      {/* Menú desplegable, solo visible cuando isMenuOpen es true */}
-      <nav className={`menu ${isMenuOpen ? 'open' : ''}`}>
+      <nav className={`menu ${isMenuOpen ? "open" : ""}`}>
         <ul>
           <li><a href="#home">Inicio</a></li>
           <li><a href="#features">Características</a></li>
@@ -64,10 +85,13 @@ function Header() {
         </ul>
       </nav>
 
-      {/* Contenido adicional */}
       <div className="header-content">
         <h1>Encuentra todos los cuidados que buscas</h1>
-        <button className="primary-button">Ver Especialistas</button>
+        {!window.location.pathname.includes("/buscador") && (
+          <button className="primary-button" onClick={handleVerEspecialistas}>
+            Buscar Especialistas
+          </button>
+        )}
       </div>
     </header>
   );
