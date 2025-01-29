@@ -66,7 +66,6 @@ const getAccessToken = async () => {
 
 
 
-
 // Ruta POST para crear suscripciones
 app.post("/api/create-subscription", async (req, res) => {
     try {
@@ -132,11 +131,62 @@ app.post("/api/create-subscription", async (req, res) => {
     }
   });
   
-  
-  
 
+// Endpoint para confirmar la suscripción
+app.post("/api/confirm-subscription", (req, res) => {
+    const { subscription_id } = req.body; // Captura el subscription_id de la URL
+    const token = req.headers['authorization']?.split(' ')[1]; // Obtén el token desde los headers
 
-  
+    console.log("Endpoint alcanzado: /api/confirm-subscription");
+    console.log("subscription_id recibido:", subscription_id);
+    console.log("Token recibido:", token);
+
+    if (!subscription_id || !token) {
+        console.error("Faltan parámetros o el token no está presente.");
+        return res.status(400).json({ message: "Faltan parámetros o el token no está presente." });
+    }
+
+    // Verificar y decodificar el token
+    jwt.verify(token, JWT_SECRET, (err, decoded) => {
+        if (err) {
+            console.error("Error al verificar el token:", err);
+            return res.status(401).json({ message: "Token inválido." });
+        }
+
+        console.log("Contenido del token decodificado:", decoded); // Ver el contenido completo del token
+
+        // Accedemos al userId desde decoded.id
+        const userId = decoded.id;
+        console.log("userId (desde JWT):", userId);
+
+        if (!userId) {
+            console.error("No se pudo obtener el userId del token.");
+            return res.status(400).json({ message: "No se pudo obtener el userId del token." });
+        }
+
+        // Realizamos la consulta SQL
+        db.query(
+            "UPDATE users SET subscription_id = ? WHERE id = ?", 
+            [subscription_id, userId], 
+            (err, result) => {
+                if (err) {
+                    console.error("Error actualizando la base de datos:", err);
+                    return res.status(500).json({ message: "Error interno del servidor." });
+                }
+
+                console.log("Resultado de la actualización:", result.affectedRows);
+
+                if (result.affectedRows === 0) {
+                    console.warn("No se encontró un usuario con el ID proporcionado.");
+                    return res.status(404).json({ message: "Usuario no encontrado." });
+                }
+
+                console.log("subscription_id actualizado correctamente en la base de datos.");
+                
+            }
+        );
+    });
+});
 
 
 
@@ -354,6 +404,7 @@ app.post('/api/login', async (req, res) => {
                     JWT_SECRET,
                     { expiresIn: '1h' } // Duración del token
                 );
+                console.log("Token JWT generado:", token);
 
                 // Si el rol es prestador, obtener el perfil profesional
                 const rol = user[0].rol || 'default';

@@ -14,6 +14,8 @@ import HistorialConsultas from "./components/HistorialConsultas";
 import Buscador from "./components/BuscarPrestador";
 import PerfilProfesional from './components/PerfilProfesional';
 import PagarSuscripcion from "./components/PagarSuscripcion";
+import Success from "./components/Success";
+import Proximamente from "./components/Proximamente";
 
 function App() {
   return (
@@ -40,6 +42,8 @@ function App() {
           <Route path="/perfil-profesional" element={<PerfilProfesional />} />
           <Route path="/buscador" element={<Buscador />} />
           <Route path="/pagar-suscripcion" element={<PagarSuscripcion />} />
+          <Route path="/success" element={<Success />} />
+          <Route path="/proximamente" element={<Proximamente />} />
           <Route path="/historial-consultas" element={<HistorialConsultas />} />
         </Routes>
       </div>

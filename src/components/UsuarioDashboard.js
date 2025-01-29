@@ -12,15 +12,15 @@ function Dashboard() {
   };
 
   const handleNavigateToMisTurnos = () => {
-    console.log("Redirigiendo a mis turnos...");
-    navigate("/mis-turnos");
+    // Redirige a la página de "Próximamente"
+    navigate('/proximamente'); // Asegúrate de que esta ruta esté configurada en tu archivo de rutas
   };
 
   const handleNavigateToHistorialConsultas = () => {
-    console.log("Redirigiendo al historial de consultas...");
-    navigate("/historial-consultas");
+    
+    navigate('/proximamente');
   };
-
+  
   return (
     <div className="dashboard-container">
       <h1>Bienvenido al Dashboard USUARIO</h1>

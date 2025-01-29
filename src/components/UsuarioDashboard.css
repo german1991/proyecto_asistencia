@@ -1,69 +1,76 @@
+/* Estilo para el dashboard de Usuario */
 .dashboard-container {
-    padding: 20px;
-    max-width: 1200px;
-    margin: 0 auto;
-    text-align: center;
-    background-color: #f9f9f9;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  .dashboard-container h1 {
-    font-size: 2.5rem;
-    color: #2c3e50;
-    margin-bottom: 20px;
-  }
-  
-  .dashboard-container p {
-    font-size: 1.1rem;
-    color: #7f8c8d;
-    margin-bottom: 30px;
-  }
-  
-  .dashboard-sections {
-    margin-top: 40px;
-    text-align: left;
-  }
-  
-  .dashboard-section {
-    margin-bottom: 30px;
-    padding: 20px;
-    background-color: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  .dashboard-section h3 {
-    font-size: 1.5rem;
-    color: #34495e;
-    margin-bottom: 10px;
-  }
-  
-  .dashboard-section p {
-    font-size: 1rem;
-    color: #95a5a6;
-    margin-bottom: 15px;
-  }
-  
-  .dashboard-button {
-    margin-top: 10px;
-    padding: 12px 24px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    color: #ffffff;
-    background-color: #3498db;
-    border: none;
-    border-radius: 5px;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-  }
-  
-  .dashboard-button:hover {
-    background-color: #2980b9;
-    transform: translateY(-3px);
-  }
-  
-  .dashboard-button:active {
-    transform: translateY(0);
-  }
-  
+  padding: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+  background-color: #f4f6f9; /* Fondo más suave y limpio */
+  border-radius: 15px; /* Bordes redondeados más pronunciados */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); /* Sombra más pronunciada */
+}
+
+.dashboard-container h1 {
+  font-size: 2.8rem; /* Título más grande */
+  color: #34495e; /* Color oscuro para el título */
+  margin-bottom: 20px;
+  font-weight: 600; /* Fuente más gruesa */
+}
+
+.dashboard-container p {
+  font-size: 1.2rem;
+  color: #7f8c8d; /* Gris oscuro */
+  margin-bottom: 30px;
+}
+
+.dashboard-sections {
+  margin-top: 50px; /* Mayor espacio entre secciones */
+  text-align: left;
+}
+
+.dashboard-section {
+  margin-bottom: 40px;
+  padding: 25px;
+  background-color: #ffffff; /* Fondo blanco para las secciones */
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Sombra más sutil */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dashboard-section:hover {
+  transform: translateY(-5px); /* Efecto al pasar el mouse */
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2); /* Sombra más grande */
+}
+
+.dashboard-section h3 {
+  font-size: 1.8rem; /* Títulos más grandes */
+  color: #2ecc71; /* Verde brillante para títulos */
+  margin-bottom: 10px;
+}
+
+.dashboard-section p {
+  font-size: 1.1rem;
+  color: #95a5a6; /* Gris claro */
+  margin-bottom: 15px;
+}
+
+.dashboard-button {
+  margin-top: 15px;
+  padding: 14px 28px; /* Botón más grande */
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  color: #ffffff;
+  background-color: #3498db; /* Azul brillante */
+  border: none;
+  border-radius: 8px; /* Bordes más redondeados */
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.dashboard-button:hover {
+  background-color: #2980b9; /* Azul más oscuro al pasar el mouse */
+  transform: translateY(-3px); /* Efecto de movimiento */
+}
+
+.dashboard-button:active {
+  transform: translateY(0); /* Efecto de clic */
+}

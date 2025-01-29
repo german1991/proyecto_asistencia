@@ -6,22 +6,30 @@ const PagarSuscripcion = () => {
   const prices = ["$10/mes", "$25/mes", "$50/mes"]; // Precios de los planes
 
   const handleSubscribe = async () => {
+    const token = localStorage.getItem('jwt'); // O sessionStorage.getItem('jwt')
+  
+    if (!token) {
+      alert("Por favor, inicia sesión primero.");
+      return;
+    }
+  
     try {
       const response = await fetch("http://localhost:5000/api/create-subscription", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
         },
       });
-
+  
       if (!response.ok) {
         throw new Error("Error al crear la suscripción.");
       }
-
+  
       const data = await response.json();
-
+  
       if (data.approveUrls && data.approveUrls.length > 0) {
-        console.log("URLs de aprobación:", data.approveUrls);
+        localStorage.setItem("jwt", token); // 🔹 Guarda el token antes de redirigir a PayPal
         setApprovalUrls(data.approveUrls);
       } else {
         throw new Error("No se pudieron obtener los enlaces de aprobación.");

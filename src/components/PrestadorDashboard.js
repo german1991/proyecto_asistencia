@@ -39,6 +39,12 @@ function Dashboard() {
     console.log("Redirigiendo a la gestión de suscripciones...");
     navigate("/suscripciones");
   };
+  const handleViewAppointments = () => {
+    navigate("/proximamente"); // Redirige a la página de "Próximamente"
+  };
+  const handleViewPatients = () => {
+    navigate("/proximamente");
+  };
 
   return (
     <div className="dashboard-container">
@@ -55,7 +61,7 @@ function Dashboard() {
         <div className="dashboard-section">
           <h3>Turnos Pendientes</h3>
           <p>Listado de turnos próximos, con opciones para confirmar o cancelar.</p>
-          <button className="btn btn-info dashboard-button">
+          <button onClick={handleViewAppointments} className="btn btn-info dashboard-button">
             Ver Turnos Pendientes
           </button>
         </div>
@@ -64,7 +70,7 @@ function Dashboard() {
         <div className="dashboard-section">
           <h3>Listado de Pacientes</h3>
           <p>Detalle de pacientes asociados a sus turnos.</p>
-          <button className="btn btn-info dashboard-button">
+          <button onClick={handleViewPatients} className="btn btn-info dashboard-button">
             Ver Listado de Pacientes
           </button>
         </div>
