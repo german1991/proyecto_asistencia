@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Cookies from 'js-cookie';  // Importar la librería para manejar cookies
+import Cookies from 'js-cookie';  
 import '../components/ForgotPassword';
 
 const ResetPasswordPage = () => {
@@ -8,14 +8,14 @@ const ResetPasswordPage = () => {
     const [errorMessage, setErrorMessage] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
 
-    // Guardar el token de la URL en una cookie
+   
     useEffect(() => {
         const queryParams = new URLSearchParams(window.location.search);
         const token = queryParams.get('token');
         if (token) {
-            // Verificar si el token está presente y guardarlo en la cookie
+            
             Cookies.set('reset_token', token, { expires: 1, secure: window.location.protocol === 'https:', path: '/' });
-            console.log("Token guardado en la cookie:", Cookies.get('reset_token'));  // Verifica si la cookie está siendo guardada
+            console.log("Token guardado en la cookie:", Cookies.get('reset_token'));  
         }
     }, []);
     
@@ -23,26 +23,26 @@ const ResetPasswordPage = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        // Verificar que las contraseñas coincidan
+        
         if (newPassword !== confirmPassword) {
             setErrorMessage('Las contraseñas no coinciden.');
             return;
         }
 
-        const token = Cookies.get('reset_token');  // Recupera el token de la cookie
+        const token = Cookies.get('reset_token'); 
         console.log("Token desde la cookie:", token); 
 
-        // Verificar si el token es válido
+        
         if (!token) {
             setErrorMessage('El token de restablecimiento no es válido.');
             return;
         }
 
         try {
-            console.log("Token en la cookie:", Cookies.get('reset_token')); // Verifica el token en la cookie
-            console.log("Token enviado en la solicitud:", token); // Verifica el token enviado en la solicitud
+            console.log("Token en la cookie:", Cookies.get('reset_token')); 
+            console.log("Token enviado en la solicitud:", token); 
 
-            // Realizar la solicitud para restablecer la contraseña
+            
             const response = await fetch('http://localhost:5000/api/reset-password', {
                 method: 'POST',
                 headers: {

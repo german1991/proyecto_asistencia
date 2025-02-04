@@ -1,13 +1,12 @@
 import React, { useState } from "react";
-import "./PagarSuscripcion.css"; // Incluye el nuevo estilo
+import "./PagarSuscripcion.css"; 
 
 const PagarSuscripcion = () => {
   const [approvalUrls, setApprovalUrls] = useState([]);
-  const prices = ["$10/mes", "$25/mes", "$50/mes"]; // Precios de los planes
+  const prices = ["$10/mes", "$25/mes", "$50/mes"]; 
 
   const handleSubscribe = async () => {
-    const token = localStorage.getItem('jwt'); // O sessionStorage.getItem('jwt')
-  
+    const token = localStorage.getItem('jwt'); 
     if (!token) {
       alert("Por favor, inicia sesión primero.");
       return;
@@ -29,7 +28,7 @@ const PagarSuscripcion = () => {
       const data = await response.json();
   
       if (data.approveUrls && data.approveUrls.length > 0) {
-        localStorage.setItem("jwt", token); // 🔹 Guarda el token antes de redirigir a PayPal
+        localStorage.setItem("jwt", token); 
         setApprovalUrls(data.approveUrls);
       } else {
         throw new Error("No se pudieron obtener los enlaces de aprobación.");

@@ -1,117 +1,89 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./PrestadorDashboard.css";
 
 function Dashboard() {
   const navigate = useNavigate();
+  const [suscripcionActiva, setSuscripcionActiva] = useState(false);
 
-  const isSubscriptionActive = false; // Simula el estado de la suscripción
+  useEffect(() => {
+    handleGoToSubscription(); 
+  }, []);
+
+  const handleGoToSubscription = async () => {
+    const token = localStorage.getItem("jwt");
+
+    if (!token) {
+      alert("Por favor, inicia sesión primero.");
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:5000/api/subscription-status", {
+        method: "GET",
+        headers: { "Authorization": `Bearer ${token}` },
+      });
+
+      const data = await response.json();
+      setSuscripcionActiva(data.suscripcion_activa || false);
+    } catch (error) {
+      console.error("Error al consultar la suscripción:", error);
+    }
+  };
 
   const handleNavigateToProfile = () => {
-    console.log("Redirigiendo a la edición del perfil profesional...");
     navigate("/perfil-profesional");
   };
 
-  const handleGoToSubscription = () => {
-    navigate("/pagar-suscripcion"); // Redirige a PagarSuscripcion
+  const handleConfigureCalendario = () => {
+    navigate("/calendario"); 
   };
 
+
   const handleConfigureAgenda = () => {
-    if (!isSubscriptionActive) {
-      alert(
-        "Tu suscripción no está activa. Por favor, abona tu suscripción para habilitar la agenda."
-      );
-      navigate("/pagar-suscripcion"); // Redirige a la página de pago
+    if (!suscripcionActiva) {
+      alert("Tu suscripción no está activa. Por favor, abona tu suscripción para habilitar la agenda.");
+      navigate("/pagar-suscripcion");
       return;
     }
-    console.log("Redirigiendo a la configuración de la agenda...");
     navigate("/configurar-agenda");
   };
 
   const handleManageSubscriptions = () => {
-    if (!isSubscriptionActive) {
-      alert(
-        "Tu suscripción no está activa. Por favor, abona tu suscripción para habilitar la agenda."
-      );
-      navigate("/pagar-suscripcion"); // Redirige a la página de pago
+    if (!suscripcionActiva) {
+      alert("Tu suscripción no está activa. Por favor, abona tu suscripción para habilitar la agenda.");
+      navigate("/pagar-suscripcion");
       return;
     }
-    console.log("Redirigiendo a la gestión de suscripciones...");
     navigate("/suscripciones");
-  };
-  const handleViewAppointments = () => {
-    navigate("/proximamente"); // Redirige a la página de "Próximamente"
-  };
-  const handleViewPatients = () => {
-    navigate("/proximamente");
   };
 
   return (
     <div className="dashboard-container">
       <h1>Bienvenido al Dashboard PRESTADOR</h1>
-      <p>
-        Desde aquí puedes gestionar tu perfil y completar la información
-        requerida.
-      </p>
+      <p>Desde aquí puedes gestionar tu perfil y completar la información requerida.</p>
 
       <div className="dashboard-sections">
         <h2>Secciones:</h2>
 
-        {/* Turnos Pendientes */}
-        <div className="dashboard-section">
-          <h3>Turnos Pendientes</h3>
-          <p>Listado de turnos próximos, con opciones para confirmar o cancelar.</p>
-          <button onClick={handleViewAppointments} className="btn btn-info dashboard-button">
-            Ver Turnos Pendientes
-          </button>
-        </div>
-
-        {/* Listado de Pacientes */}
-        <div className="dashboard-section">
-          <h3>Listado de Pacientes</h3>
-          <p>Detalle de pacientes asociados a sus turnos.</p>
-          <button onClick={handleViewPatients} className="btn btn-info dashboard-button">
-            Ver Listado de Pacientes
-          </button>
-        </div>
-
-        {/* Perfil Profesional */}
         <div className="dashboard-section">
           <h3>Perfil Profesional</h3>
-          <p>
-            Información validada por SISA, editable según sea necesario.
-          </p>
-          <button
-            className="btn btn-info dashboard-button"
-            onClick={handleNavigateToProfile}
-          >
+          <button className="btn btn-info dashboard-button" onClick={handleNavigateToProfile}>
             Perfil Profesional
           </button>
         </div>
 
-        {/* Configuración de Agenda */}
         <div className="dashboard-section">
           <h3>Configuración de Agenda</h3>
-          <p>Modificación de horarios y disponibilidad.</p>
-          <button
-            className="btn btn-info dashboard-button"
-            onClick={handleConfigureAgenda}
-          >
+          <button className="btn btn-info dashboard-button" onClick={handleConfigureCalendario}>
             Configurar Agenda
           </button>
         </div>
 
-        {/* Gestión de Suscripciones */}
         <div className="dashboard-section">
           <h3>Gestión de Suscripciones</h3>
-          <p>
-            Consulta el estado de tu suscripción o realiza el pago para habilitar
-            la configuración de la agenda.
-          </p>
-          <button
-            className="btn btn-info dashboard-button"
-            onClick={handleGoToSubscription}
-          >
+          <p>{suscripcionActiva ? "✅ Suscripción activa" : "Tu suscripción no está activa."}</p>
+          <button className="btn btn-info dashboard-button" onClick={handleGoToSubscription}>
             Gestionar Suscripciones
           </button>
         </div>

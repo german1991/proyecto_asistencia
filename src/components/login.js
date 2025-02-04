@@ -6,7 +6,7 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false); // Nuevo estado de carga
+  const [loading, setLoading] = useState(false); 
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -38,17 +38,17 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true); // Inicia la carga
+    setLoading(true); 
 
     if (!email || !password) {
       setError("Por favor, rellene todos los campos.");
-      setLoading(false); // Finaliza la carga
+      setLoading(false); 
       return;
     }
 
     if (!validateEmail(email)) {
       setError("Por favor, ingrese un correo electrónico válido.");
-      setLoading(false); // Finaliza la carga
+      setLoading(false); 
       return;
     }
 
@@ -64,40 +64,40 @@ function Login() {
       if (!response.ok) {
         const errorData = await response.json();
         setError(errorData.message || "Error al iniciar sesión.");
-        setLoading(false); // Finaliza la carga
+        setLoading(false); 
         return;
       }
 
       const data = await response.json();
       console.log("Respuesta completa de la API:", data);
 
-      // Guardar el token en localStorage
+      
       if (data.token) {
         localStorage.setItem("jwt", data.token);
         console.log("Token guardado:", data.token);
       } else {
         console.error("No se recibió un token en la respuesta.");
         setError("Error al procesar la autenticación.");
-        setLoading(false); // Finaliza la carga
+        setLoading(false); 
         return;
       }
 
-      // Redirigir según el rol
+    
       if (data.rol) {
         if (data.rol === "prestador") {
             setTimeout(() => {
                 navigate("/prestador-dashboard");
-                window.location.reload(); // Refresca automáticamente después de redirigir
+                window.location.reload(); 
             }, 10);
         } else {
             setTimeout(() => {
                 navigate("/usuario-dashboard");
-                window.location.reload(); // Refresca automáticamente después de redirigir
+                window.location.reload(); 
             }, 10);
         }
     } else {
         console.error("No se recibió un campo 'rol'.");
-        setLoading(false); // Finaliza la carga
+        setLoading(false); 
     }
     
 
@@ -108,7 +108,7 @@ function Login() {
     } catch (err) {
       console.error("Error durante el inicio de sesión:", err);
       setError("No se pudo conectar al servidor. Intente más tarde.");
-      setLoading(false); // Finaliza la carga
+      setLoading(false); 
     }
   };
 
@@ -120,16 +120,16 @@ function Login() {
       const userInfo = parseJwt(token);
       console.log("Información del usuario:", userInfo);
 
-      // Guardar el token en localStorage
+     
       localStorage.setItem("jwt", token);
 
-      // Redirigir según el rol del usuario
+      
       if (userInfo.rol === "prestador") {
         navigate("/prestador-dashboard");
       } else {
         setTimeout(() => {
           navigate("/usuario-dashboard");
-          window.location.reload(); // Refresca automáticamente después de redirigir
+          window.location.reload(); 
       }, 10);
     }
     } catch (error) {

@@ -11,14 +11,14 @@ const Buscador = () => {
   };
 
   const handleBuscar = async () => {
-    // Validación del campo antes de buscar
+   
     if (!especialidad.trim()) {
       alert('Por favor, ingrese una especialidad antes de buscar.');
       return;
     }
 
     setLoading(true);
-    setError(null); // Reseteamos errores previos
+    setError(null); 
 
     try {
       const response = await fetch(`http://localhost:5000/api/prestadores?especialidad=${especialidad}`);

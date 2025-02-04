@@ -50,26 +50,26 @@
 .dashboard-section {
   margin-bottom: 30px;
   padding: 20px;
-  background-color: #393939; /* Fondo gris oscuro para las secciones */
+  background-color: #393939; 
   border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Sombra más marcada */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); 
 }
 
 .dashboard-section h3 {
   font-size: 1.5rem;
-  color: #eaeaea; /* Texto claro */
+  color: #eaeaea; 
   margin-bottom: 10px;
 }
 
 .dashboard-section p {
   font-size: 1rem;
-  color: #b3b3b3; /* Texto gris claro */
+  color: #b3b3b3; 
   margin-bottom: 15px;
 }
 
 .dashboard-section .dashboard-button {
-  background-color: #3a3a3a; /* Botones gris oscuro */
-  color: #ffffff; /* Texto blanco */
+  background-color: #3a3a3a; 
+  color: #ffffff; 
   border: none;
   padding: 10px 20px;
   border-radius: 5px;
@@ -78,5 +78,5 @@
 }
 
 .dashboard-section .dashboard-button:hover {
-  background-color: #525252; /* Más claro al hover */
+  background-color: #525252; 
 }

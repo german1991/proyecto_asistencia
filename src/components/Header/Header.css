@@ -1,5 +1,5 @@
 .header {
-    background: linear-gradient(to bottom, #66bfff, #cce6ff); /* Mantén el color de fondo del encabezado */
+    background: linear-gradient(to bottom, #66bfff, #cce6ff); 
     color: white;
     padding: 20px;
   }
@@ -15,7 +15,7 @@
     border: none;
     font-size: 24px;
     cursor: pointer;
-    color: white; /* El color de la hamburguesa sigue siendo blanco */
+    color: white; 
   }
   
   .logo {
@@ -44,22 +44,22 @@
   
   /* Estilos para el menú desplegable */
   .menu {
-    display: none; /* Ocultar el menú por defecto */
+    display: none; 
     position: absolute;
-    top: 60px; /* Coloca el menú justo debajo del header */
+    top: 60px; 
     left: 0;
-    width: 200px; /* Ancho fijo para el menú */
-    background-color: #66bfff; /* Mantén el mismo color de fondo que el header */
+    width: 200px; 
+    background-color: #66bfff; 
     padding: 10px 0;
-    border-radius: 5px; /* Bordes redondeados para el estilo rectangular */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Agrega sombra para hacerlo más visible */
+    border-radius: 5px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   }
   
   .menu.open {
-    display: block; /* Mostrar el menú cuando tiene la clase 'open' */
+    display: block; 
   }
   
-  /* Estilos para los enlaces del menú */
+
   .menu ul {
     list-style: none;
     padding: 0;
@@ -71,20 +71,20 @@
   }
   
   .menu ul li a {
-    display: block; /* Para asegurarse de que los enlaces ocupen toda la fila */
+    display: block; 
     color: white;
     text-decoration: none;
     font-size: 18px;
-    text-align: center; /* Centrar el texto dentro del enlace */
-    padding: 10px 0; /* Espaciado para los enlaces */
+    text-align: center; 
+    padding: 10px 0; 
   }
   
   .menu ul li a:hover {
-    background-color: #003d80; /* Resalta el enlace cuando el cursor pasa por encima */
+    background-color: #003d80; 
     text-decoration: none;
   }
   .home-icon {
-    font-size: 30px; /* Puedes ajustar este valor para hacerlo más grande o pequeño */
+    font-size: 30px;
   }
   
   .header-top {
@@ -99,18 +99,18 @@
   }
   
   .home-link {
-    margin-right: 20px; /* Ajusta el espacio entre el icono de la casa y el botón */
+    margin-right: 20px;
   }
   
   .register-button {
-    margin-left: 20px; /* Ajusta el espacio entre el icono de la casa y el botón */
+    margin-left: 20px;
   }
   
   .register-button .btn {
     font-size: 14px;
   }
   
-  /* Estilo para el botón de "Mi perfil" con ícono */
+
 .btn-secondary {
   background-color: #007BFF;
   color: white;
@@ -123,5 +123,5 @@
 }
 
 .btn-secondary i {
-  margin-right: 8px; /* Espacio entre el ícono y el texto */
+  margin-right: 8px;
 }

@@ -16,6 +16,7 @@ import PerfilProfesional from './components/PerfilProfesional';
 import PagarSuscripcion from "./components/PagarSuscripcion";
 import Success from "./components/Success";
 import Proximamente from "./components/Proximamente";
+import Calendar from "./components/Calendario";
 
 function App() {
   return (
@@ -44,6 +45,7 @@ function App() {
           <Route path="/pagar-suscripcion" element={<PagarSuscripcion />} />
           <Route path="/success" element={<Success />} />
           <Route path="/proximamente" element={<Proximamente />} />
+          <Route path="/calendario" element={<Calendar />} />
           <Route path="/historial-consultas" element={<HistorialConsultas />} />
         </Routes>
       </div>

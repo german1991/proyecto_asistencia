@@ -48,7 +48,7 @@ function Register() {
             const data = await response.json();
 
             if (response.ok && data.needsRoleSelection) {
-                // Mostrar cuadro de selección de roles
+                
                 const selectedRole = window.prompt(
                     `${data.message}\nEscribe "prestador" o "usuario" para continuar.`,
                     "prestador"

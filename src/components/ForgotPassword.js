@@ -8,18 +8,18 @@ function ForgotPassword() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Realizar la solicitud fetch para enviar el correo de recuperación
+   
     fetch("http://localhost:5000/api/forgot-password", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ email }), // Enviar el correo en el cuerpo de la solicitud
+      body: JSON.stringify({ email }), 
     })
       .then((response) => response.json())
       .then((data) => {
-        setMessage(data.message); // Mostrar el mensaje de respuesta
-        setEmail(""); // Limpiar el campo de correo
+        setMessage(data.message); 
+        setEmail(""); 
       })
       .catch((error) => {
         setMessage("Error al enviar el correo de recuperación.");

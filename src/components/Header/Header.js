@@ -3,22 +3,22 @@ import { Link, useNavigate } from "react-router-dom";
 import "./Header.css";
 
 function Header() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false); // Estado para controlar si el menú está abierto
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Estado para verificar si el usuario está logueado
-  const navigate = useNavigate(); // Hook para redirección
+  const [isMenuOpen, setIsMenuOpen] = useState(false); 
+  const [isLoggedIn, setIsLoggedIn] = useState(false); 
+  const navigate = useNavigate(); 
 
-  // Función que alterna el estado del menú
+  
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  // Actualiza el estado `isLoggedIn` al cargar el componente
+  
   useEffect(() => {
     const jwt = localStorage.getItem("jwt");
     setIsLoggedIn(!!jwt);
   }, []);
 
-  // Listener para cambios en `localStorage`
+  
   useEffect(() => {
     const handleStorageChange = () => {
       const jwt = localStorage.getItem("jwt");
@@ -36,8 +36,8 @@ function Header() {
       await fetch("http://localhost:5000/api/logout", {
         method: "POST",
       });
-      localStorage.removeItem("jwt"); // Eliminar JWT del localStorage
-      setIsLoggedIn(false); // Actualizar estado de logueo
+      localStorage.removeItem("jwt"); 
+      setIsLoggedIn(false);
       navigate("/");
       
     } catch (error) {
@@ -46,7 +46,7 @@ function Header() {
   };
 
   const handleVerEspecialistas = () => {
-    navigate("/buscador"); // Redirige al formulario de búsqueda
+    navigate("/buscador"); 
   };
 
   return (

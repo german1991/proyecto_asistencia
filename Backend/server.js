@@ -13,8 +13,8 @@ const fetch = require('node-fetch');
 app.use(express.json());
 
 app.use(cors({
-    origin: 'http://localhost:3000', // Permitir cualquier dominio
-    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos permitidos
+    origin: 'http://localhost:3000', 
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization']
   }));
 
@@ -66,18 +66,18 @@ const getAccessToken = async () => {
 
 
 
-// Ruta POST para crear suscripciones
+
 app.post("/api/create-subscription", async (req, res) => {
     try {
-      const access_token = await getAccessToken(); // Obtener el token de acceso
+      const access_token = await getAccessToken(); 
   
       if (!access_token) {
         throw new Error("Token de acceso no válido.");
       }
   
-      console.log("Access Token:", access_token); // Mostrar el token de acceso
+      console.log("Access Token:", access_token); 
   
-      // Crear ambas suscripciones con sus respectivos planes
+      
       const subscriptions = [
         {
           plan_id: "P-63J5341477236480YM6GXN4Y",
@@ -112,7 +112,7 @@ app.post("/api/create-subscription", async (req, res) => {
         subscriptionResponses.map(response => response.json())
       );
   
-      console.log("Response Data:", subscriptionData); // Mostrar todas las respuestas
+      console.log("Response Data:", subscriptionData); 
   
       const approveLinks = subscriptionData.map(data =>
         data.links.find(link => link.rel === "approve")
@@ -120,8 +120,8 @@ app.post("/api/create-subscription", async (req, res) => {
   
       if (approveLinks.every(link => link)) {
         const approveUrls = approveLinks.map(link => link.href);
-        console.log("Approve Links:", approveUrls); // Mostrar todos los enlaces de aprobación
-        res.json({ approveUrls }); // Enviar los enlaces al frontend
+        console.log("Approve Links:", approveUrls); 
+        res.json({ approveUrls }); 
       } else {
         res.status(400).json({ message: "No se encontraron enlaces de aprobación." });
       }
@@ -132,10 +132,49 @@ app.post("/api/create-subscription", async (req, res) => {
   });
   
 
-// Endpoint para confirmar la suscripción
+app.get("/api/subscription-status", (req, res) => {
+    const token = req.headers["authorization"]?.split(" ")[1];
+  
+    if (!token) {
+      return res.status(401).json({ message: "No autorizado" });
+    }
+  
+    jwt.verify(token, JWT_SECRET, (err, decoded) => {
+      if (err) {
+        return res.status(401).json({ message: "Token inválido" });
+      }
+  
+      const userId = decoded.id;
+  
+      db.query("SELECT subscription_id FROM users WHERE id = ?", [userId], (err, result) => {
+        if (err) {
+          return res.status(500).json({ message: "Error interno del servidor." });
+        }
+  
+        if (result.length > 0 && result[0].subscription_id) {
+          res.json({ suscripcion_activa: true });
+        } else {
+          res.json({ suscripcion_activa: false });
+        }
+      });
+    });
+  });
+  
+
+
+
+
+
+
+
+
+
+
+
+
 app.post("/api/confirm-subscription", (req, res) => {
-    const { subscription_id } = req.body; // Captura el subscription_id de la URL
-    const token = req.headers['authorization']?.split(' ')[1]; // Obtén el token desde los headers
+    const { subscription_id } = req.body; 
+    const token = req.headers['authorization']?.split(' ')[1]; 
 
     console.log("Endpoint alcanzado: /api/confirm-subscription");
     console.log("subscription_id recibido:", subscription_id);
@@ -146,16 +185,16 @@ app.post("/api/confirm-subscription", (req, res) => {
         return res.status(400).json({ message: "Faltan parámetros o el token no está presente." });
     }
 
-    // Verificar y decodificar el token
+
     jwt.verify(token, JWT_SECRET, (err, decoded) => {
         if (err) {
             console.error("Error al verificar el token:", err);
             return res.status(401).json({ message: "Token inválido." });
         }
 
-        console.log("Contenido del token decodificado:", decoded); // Ver el contenido completo del token
+        console.log("Contenido del token decodificado:", decoded); 
 
-        // Accedemos al userId desde decoded.id
+       
         const userId = decoded.id;
         console.log("userId (desde JWT):", userId);
 
@@ -164,7 +203,7 @@ app.post("/api/confirm-subscription", (req, res) => {
             return res.status(400).json({ message: "No se pudo obtener el userId del token." });
         }
 
-        // Realizamos la consulta SQL
+       
         db.query(
             "UPDATE users SET subscription_id = ? WHERE id = ?", 
             [subscription_id, userId], 
@@ -249,7 +288,7 @@ app.get('/api/prestadores', (req, res) => {
 
 
 
-// Rutas protegidas con authenticateToken
+
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
@@ -262,25 +301,25 @@ const authenticateToken = (req, res, next) => {
     if (err) {
       return res.status(403).json({ message: 'Token inválido o expirado' });
     }
-    req.user = user; // Almacena la información del usuario en `req.user`
+    req.user = user; 
     next();
   });
 };
 
-// Ruta protegida
+
 app.get('/api/perfilprofesional', authenticateToken, (req, res) => {
     res.json({ mensaje: 'Perfil profesional', usuario: req.usuario });
   });
 
 
-// Configuración de Mailjet
+
 const client = mailjet.apiConnect('c3392ed4598b22b42b5e6611eb92e748', '1fe97b004606bbb51f00b53b2d27f442');
 
-// Ruta de recuperación de contraseña
+
 app.post('/api/forgot-password', (req, res) => {
     const { email } = req.body;
 
-    // Verifica si el usuario existe en la base de datos
+    
     db.query('SELECT * FROM users WHERE email = ?', [email], (err, result) => {
         if (err) {
             console.error('Error al buscar usuario:', err);
@@ -292,9 +331,9 @@ app.post('/api/forgot-password', (req, res) => {
 
         const user = result[0];
 
-        // Genera un token único y guarda su expiración
+        
         const token = crypto.randomBytes(32).toString("hex");
-        const tokenExpires = new Date(Date.now() + 3600000); // Expira en 1 hora
+        const tokenExpires = new Date(Date.now() + 3600000); 
 
         db.query('UPDATE users SET reset_token = ?, reset_token_expires = ? WHERE email = ?', 
             [token, tokenExpires, email], (err) => {
@@ -303,10 +342,10 @@ app.post('/api/forgot-password', (req, res) => {
                 return res.status(500).json({ message: 'Error al guardar el token' });
             }
 
-            // Enlace de recuperación
+            
             const resetLink = `http://localhost:3000/reset-password?token=${token}`;
 
-            // Configura el correo con el enlace de recuperación
+            
             const mailOptions = {
                 Messages: [
                     {
@@ -320,7 +359,7 @@ app.post('/api/forgot-password', (req, res) => {
                         },
                         To: [
                             {
-                                Email: email // Dirección del destinatario
+                                Email: email 
                             }
                         ],
                         Subject: "Recuperación de Contraseña",
@@ -343,16 +382,75 @@ app.post('/api/forgot-password', (req, res) => {
     });
 });
 
-// Ruta para validar y restablecer contraseña
+
+
+const eventos = [];
+
+
+app.post("/webhook-calendly", (req, res) => {
+  console.log("Webhook recibido:", req.body);
+  const eventData = req.body.payload; 
+
+  if (!eventData || !eventData.event) {
+    return res.status(400).json({ message: "Evento inválido" });
+  }
+
+
+  const event = {
+    title: `Turno con ${eventData.invitee.name}`,
+    start: eventData.event.start_time,
+    end: eventData.event.end_time,
+  };
+
+ 
+  eventos.push(event);
+
+  console.log("Evento guardado:", event);
+  res.status(200).send("Evento recibido");
+});
+
+
+app.get("/api/turnos", (req, res) => {
+  res.json(eventos);
+});
+
+
+const token = "eyJraWQiOiIxY2UxZTEzNjE3ZGNmNzY2YjNjZWJjY2Y4ZGM1YmFmYThhNjVlNjg0MDIzZjdjMzJiZTgzNDliMjM4MDEzNWI0IiwidHlwIjoiUEFUIiwiYWxnIjoiRVMyNTYifQ.eyJpc3MiOiJodHRwczovL2F1dGguY2FsZW5kbHkuY29tIiwiaWF0IjoxNzM3MDUzMzAxLCJqdGkiOiI4OWU1MzJkZi1iYTJmLTRiYWMtODkxNS01MWY5Y2I5YjE1Y2QiLCJ1c2VyX3V1aWQiOiJiN2U4OGI2Yi0yMzZkLTQ1MDQtYjBhYi1iYzc5YzNiZGJhNTAifQ.fRNw7YJfVoHaBCBa7A1SlFxM19e0ctt9_BoJ_GRFLRiY61EN6eSzARS6djHgRWc3irg7z92-3BIHJXaHl6johA";
+
+async function createWebhook() {
+  try {
+    const response = await fetch("https://api.calendly.com/webhook_subscriptions", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        url: "http://localhost:5000/webhook-calendly", 
+        events: ["invitee.created"], 
+      }),
+    });
+
+    const data = await response.json();
+    console.log("Webhook creado:", data);
+  } catch (error) {
+    console.error("Error al crear el webhook:", error);
+  }
+}
+
+createWebhook();
+
+
+
 app.post('/api/reset-password', (req, res) => {
     const { token, newPassword } = req.body;
 
-    // Validar longitud de la nueva contraseña
+   
     if (newPassword.length < 6) {
         return res.status(400).json({ message: 'La contraseña debe tener al menos 6 caracteres' });
     }
 
-    // Verifica si el token es válido y no ha expirado
+    
     db.query('SELECT * FROM users WHERE reset_token = ? AND reset_token_expires > ?', 
         [token, new Date()], (err, result) => {
         if (err) {
@@ -365,14 +463,14 @@ app.post('/api/reset-password', (req, res) => {
 
         const user = result[0];
 
-        // Hashea la nueva contraseña
+        
         bcrypt.hash(newPassword, 10, (err, hashedPassword) => {
             if (err) {
                 console.error('Error al hashear la contraseña:', err);
                 return res.status(500).json({ message: 'Error al restablecer la contraseña' });
             }
 
-            // Actualiza la contraseña en la base de datos
+            
             db.query('UPDATE users SET password = ?, reset_token = NULL, reset_token_expires = NULL WHERE id = ?', 
                 [hashedPassword, user.id], (err) => {
                 if (err) {
@@ -386,27 +484,27 @@ app.post('/api/reset-password', (req, res) => {
 });
 
 
-// Ruta de login
+
 app.post('/api/login', async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        // Verificar si el usuario existe en la base de datos
+        
         const [user] = await db.promise().query('SELECT * FROM users WHERE email = ?', [email]);
 
         if (user.length > 0) {
             const validPassword = await bcrypt.compare(password, user[0].password);
 
             if (validPassword) {
-                // Generar token JWT
+                
                 const token = jwt.sign(
-                    { id: user[0].id, email: user[0].email, rol: user[0].rol }, // Datos a incluir en el token
+                    { id: user[0].id, email: user[0].email, rol: user[0].rol },
                     JWT_SECRET,
-                    { expiresIn: '1h' } // Duración del token
+                    { expiresIn: '1h' } 
                 );
                 console.log("Token JWT generado:", token);
 
-                // Si el rol es prestador, obtener el perfil profesional
+                
                 const rol = user[0].rol || 'default';
 
                 if (rol === 'prestador') {
@@ -415,7 +513,7 @@ app.post('/api/login', async (req, res) => {
                     if (perfil.length > 0) {
                         return res.status(200).json({
                             message: 'Login exitoso y datos de perfil profesional mostrados',
-                            token, // Incluir el token en la respuesta
+                            token, 
                             user: user[0],
                             perfilProfesional: perfil[0],
                             rol: rol
@@ -425,10 +523,10 @@ app.post('/api/login', async (req, res) => {
                     }
                 }
 
-                // Respuesta para usuarios sin perfil profesional
+                
                 return res.status(200).json({
                     message: 'Login exitoso',
-                    token, // Incluir el token en la respuesta
+                    token, 
                     user: user[0],
                     rol: rol
                 });
@@ -449,10 +547,10 @@ app.post('/api/login', async (req, res) => {
 
 
 
-// Ruta para obtener el perfil profesional
+
 app.get('/api/profile/perfilProfesional', authenticateToken, async (req, res) => {
     try {
-        const { email, rol } = req.user; // `req.user` contiene la información del token
+        const { email, rol } = req.user; 
 
         if (rol === 'prestador') {
             const [perfil] = await db.promise().query(
@@ -463,7 +561,7 @@ app.get('/api/profile/perfilProfesional', authenticateToken, async (req, res) =>
             if (perfil.length > 0) {
                 return res.status(200).json({
                     message: 'Datos del perfil profesional obtenidos exitosamente',
-                    perfilProfesional: perfil[0], // Devuelve el perfil del profesional
+                    perfilProfesional: perfil[0], 
                     rol: rol,
                 });
             } else {
@@ -485,11 +583,11 @@ app.get('/api/profile/perfilProfesional', authenticateToken, async (req, res) =>
 app.post('/api/register', async (req, res) => {
     const { email, password, nombre, apellido, documento, selectedRole } = req.body;
 
-    let detectedRole = 'usuario'; // Rol predeterminado
+    let detectedRole = 'usuario'; 
     let apiResponse;
 
     try {
-        // Llamar a la API externa para verificar si es prestador
+        
         const url = `http://sisa.msal.gov.ar/sisa/services/rest/profesional/obtener?usuario=faprado&clave=SEXP1POM70&apellido=${encodeURIComponent(apellido)}&nombre=${encodeURIComponent(nombre)}&nrodoc=${encodeURIComponent(documento)}`;
         apiResponse = await axios.get(url);
         console.log("Respuesta de la API de SISA:", apiResponse.data);
@@ -502,7 +600,7 @@ app.post('/api/register', async (req, res) => {
         return res.status(500).json({ message: 'Error al verificar el rol en la API externa' });
     }
 
-    // Si es prestador y no se ha especificado el rol
+    
     if (detectedRole === 'prestador' && !selectedRole) {
         return res.status(200).json({
             message: 'Se te identificó como prestador. ¿Con qué rol deseas registrarte?',
@@ -512,31 +610,31 @@ app.post('/api/register', async (req, res) => {
     }
 
     try {
-        // Verificar si el correo ya existe
+       
         const [emailCheck] = await db.promise().query('SELECT * FROM users WHERE email = ?', [email]);
         if (emailCheck.length > 0) {
             return res.status(400).json({ message: 'El correo electrónico ya está registrado' });
         }
 
-        // Verificar si el documento ya existe
+       
         const [docCheck] = await db.promise().query('SELECT * FROM users WHERE documento = ?', [documento]);
         if (docCheck.length > 0) {
             return res.status(400).json({ message: 'El documento ya está registrado' });
         }
 
-        // Encriptar la contraseña
+        
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Determinar el rol final a guardar
+        
         const roleToSave = selectedRole || detectedRole;
 
-        // Insertar el usuario en la base de datos
+        
         await db.promise().query(
             'INSERT INTO users (email, password, nombre, apellido, documento, rol) VALUES (?, ?, ?, ?, ?, ?)',
             [email, hashedPassword, nombre, apellido, documento, roleToSave]
         );
 
-        // Si es prestador, insertar en la tabla perfiles_profesionales
+        
         if (detectedRole === 'prestador' && apiResponse?.data) {
             const matriculaData = apiResponse.data.matriculas?.[0] || {};
             const matricula = matriculaData.matricula || null;
@@ -587,14 +685,14 @@ app.post('/api/register', async (req, res) => {
 
 app.post('/api/profile/actualizarEspecialidades', authenticateToken, async (req, res) => {
     const { especialidades } = req.body;
-    const { id } = req.user; // ID del usuario extraído del token
+    const { id } = req.user; 
 
     if (!especialidades || especialidades.length === 0) {
         return res.status(400).json({ error: 'Especialidades son requeridas' });
     }
 
     try {
-        // Verificar y crear especialidades si no existen
+        
         const insertPromises = especialidades.map(async nombre => {
             const [especialidad] = await db.promise().query('SELECT id FROM especialidades WHERE especialidad = ?', [nombre]);
             if (especialidad.length === 0) {
@@ -607,7 +705,7 @@ app.post('/api/profile/actualizarEspecialidades', authenticateToken, async (req,
         const especialidadIds = await Promise.all(insertPromises);
 
         const linkPromises = especialidadIds.map(async especialidadId => {
-            // Cambiado a 'users(id)'
+            
             const [usuario] = await db.promise().query('SELECT id FROM users WHERE id = ?', [id]);
             if (usuario.length === 0) {
                 throw new Error('Usuario no encontrado');
@@ -620,7 +718,7 @@ app.post('/api/profile/actualizarEspecialidades', authenticateToken, async (req,
 
         await Promise.all(linkPromises);
 
-        // Recuperar las especialidades asociadas al usuario
+        
         const [especialidadesAsociadas] = await db.promise().query(
             `SELECT e.especialidad AS especialidad
              FROM usuario_especialidades ue

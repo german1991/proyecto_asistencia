@@ -12,8 +12,8 @@ function Dashboard() {
   };
 
   const handleNavigateToMisTurnos = () => {
-    // Redirige a la página de "Próximamente"
-    navigate('/proximamente'); // Asegúrate de que esta ruta esté configurada en tu archivo de rutas
+   
+    navigate('/proximamente'); 
   };
 
   const handleNavigateToHistorialConsultas = () => {

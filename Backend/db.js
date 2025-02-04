@@ -1,4 +1,4 @@
-const mysql = require('mysql2'); // Usamos 'require' en lugar de 'import'
+const mysql = require('mysql2'); 
 
 
 const connection = mysql.createConnection({

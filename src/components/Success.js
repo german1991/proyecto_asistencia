@@ -3,23 +3,23 @@ import { useNavigate } from "react-router-dom";
 
 const SuccessPage = () => {
   const navigate = useNavigate();
-  const [subscriptionStatus, setSubscriptionStatus] = useState(null); // Estado para manejar el mensaje de éxito o error
+  const [subscriptionStatus, setSubscriptionStatus] = useState(null); 
 
   useEffect(() => {
-    // Recuperar los parámetros de la URL
+   
     const params = new URLSearchParams(window.location.search);
     const subscriptionId = params.get("subscription_id");
-    const token = localStorage.getItem("jwt"); // Recupera el token guardado en el localStorage
+    const token = localStorage.getItem("jwt"); 
 
-    // Si no se obtienen los parámetros necesarios, mostrar un mensaje de error
+    
     if (!subscriptionId || !token) {
       setSubscriptionStatus("Error al recuperar los datos de la suscripción.");
       return;
     }
 
-    // Enviar el token al backend después de la redirección
+    
     fetch(`http://localhost:5000/api/confirm-subscription`, {
-      method: "POST", // Usar POST para mayor seguridad
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`,
@@ -29,8 +29,8 @@ const SuccessPage = () => {
       .then((response) => response.json())
       .then((data) => {
         if (data.message === "Suscripción confirmada") {
-          setSubscriptionStatus("Suscripción exitosa"); // Mostrar mensaje de éxito
-          localStorage.removeItem("jwt"); // Limpiar el token después de la confirmación
+          setSubscriptionStatus("Suscripción exitosa"); 
+          localStorage.removeItem("jwt");
         } else {
           setSubscriptionStatus("Hubo un error al procesar la suscripción.");
         }
@@ -42,7 +42,7 @@ const SuccessPage = () => {
   }, [navigate]);
 
   const handleGoToDashboard = () => {
-    navigate("/prestador-dashboard"); // Redirige al Dashboard
+    navigate("/prestador-dashboard"); 
   };
 
   return (
